@@ -86,7 +86,6 @@ func TestEditTask(t *testing.T) {
 			"repeat":  v.repeat,
 		}, http.MethodPut)
 		assert.NoError(t, err)
-
 		var errVal string
 		e, ok := m["error"]
 		if ok {
