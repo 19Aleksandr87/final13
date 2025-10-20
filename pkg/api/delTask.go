@@ -1,28 +1,30 @@
 package api
 
 import (
+	"database/sql"
+	"errors"
 	"net/http"
 
 	"final/pkg/api/services"
 	"final/pkg/db"
 )
 
-func DelTask(w http.ResponseWriter, r *http.Request) {
+func DelTask(w http.ResponseWriter, r *http.Request, DB *sql.DB) {
 	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodDelete {
-		http.Error(w, `{"error":"Method not allowed"}`, http.StatusMethodNotAllowed)
+		services.Er(w, errors.New(`{"error":"Method not allowed"}`), http.StatusMethodNotAllowed)
 		return
 	}
 
 	id := r.URL.Query().Get("id")
 	if id == "" {
-		http.Error(w, `{"error":"Не указан идентификатор"}`, http.StatusBadRequest)
+		services.Er(w, errors.New(`{"error":"Не указан идентификатор"}`), http.StatusBadRequest)
 		return
 	}
-	err := db.TaskDel(id)
+	err := db.TaskDel(id, DB)
 	if err != nil {
-		services.Er(w, err)
+		services.Er(w, err, http.StatusNotFound)
 		return
 	}
-	w.Write([]byte(`{}`))
+	services.WriteJson(w, map[string]string{}, http.StatusOK)
 }

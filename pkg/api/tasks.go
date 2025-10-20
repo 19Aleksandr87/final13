@@ -1,42 +1,61 @@
 package api
 
 import (
-	"encoding/json"
+	"database/sql"
 	"net/http"
 
 	"final/pkg/api/services"
 	"final/pkg/db"
+
+	"time"
 )
 
 type TasksResp struct {
 	Tasks []*db.TaskDTO `json:"tasks"`
 }
 
-// func tasksHandler(w http.ResponseWriter) {
-func TasksHandler(w http.ResponseWriter, r *http.Request) {
+func TasksHandler(w http.ResponseWriter, r *http.Request, DB *sql.DB) {
 	if r.Method != http.MethodGet {
 		http.Error(w, `{"error":"Method not allowed"}`, http.StatusMethodNotAllowed)
 	}
-	tasks, err := db.Tasks(50) // в параметре максимальное количество записей
+	search := r.URL.Query().Get("search")
+	if search != "" {
+		t, err := time.Parse("02.01.2006", search)
+		if err == nil {
+			s := t.Format(services.FormatDate)
+			tasks, err := db.DateTasks(s, 50, DB)
+			if err != nil {
+				services.Er(w, err, http.StatusInternalServerError)
+				return
+			}
+			services.WriteJson(w, TasksResp{
+				Tasks: tasks,
+			}, http.StatusInternalServerError)
+			return
+		}
+		err = nil
+		tasks, err := db.SearchTasks(search, 50, DB)
+		if err != nil {
+			services.Er(w, err, http.StatusInternalServerError)
+			return
+		}
+		services.WriteJson(w, TasksResp{
+			Tasks: tasks,
+		}, http.StatusInternalServerError)
+		return
+	}
+
+	tasks, err := db.Tasks(50, DB) // в параметре максимальное количество записей
 	if err != nil {
-		services.Er(w, err)
+		services.Er(w, err, http.StatusInternalServerError)
 		return
 	}
 	if tasks == nil {
-		w.Write([]byte(`{"tasks":[]}`))
+		services.WriteJson(w, map[string][]any{"tasks": {}}, http.StatusOK)
 		return
 	}
-	writeJson(w, TasksResp{
-		Tasks: tasks,
-	})
-}
 
-func writeJson(w http.ResponseWriter, data interface{}) {
-	w.Header().Set("Content-Type", "application/json")
-	jsData, err := json.Marshal(data)
-	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-	w.Write(jsData)
+	services.WriteJson(w, TasksResp{
+		Tasks: tasks,
+	}, http.StatusInternalServerError)
 }

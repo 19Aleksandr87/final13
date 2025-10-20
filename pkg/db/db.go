@@ -2,6 +2,7 @@ package db
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -26,24 +27,24 @@ func Init(dbFile string) error {
 
 	if err != nil {
 		if !errors.Is(err, os.ErrNotExist) {
-			return errors.New("os.Stat " + err.Error())
+			return fmt.Errorf("os.Stat: %w", err)
 		}
 		path, err := filepath.Abs(dbFile)
 		if err != nil {
-			return errors.New("filepath.Abs " + err.Error())
+			return fmt.Errorf("filepath.Abs: %w", err)
 		}
 		_, err = os.Create(path)
 		if err != nil {
-			return errors.New("os.Create " + err.Error())
+			return fmt.Errorf("os.Create: %w", err)
 		}
 		DB, err := sql.Open("sqlite", path)
 		if err != nil {
-			return errors.New("sql.Open " + err.Error())
+			return fmt.Errorf("sql.Open: %w", err)
 		}
 		defer DB.Close()
 		_, err = DB.Exec(schema)
 		if err != nil {
-			return errors.New("DB.Exec " + err.Error())
+			return fmt.Errorf("DB.Exec: %w", err)
 		}
 	}
 	return nil

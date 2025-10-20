@@ -7,12 +7,7 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-func UpdateTask(s string) (*TaskDTO, error) {
-	DB, err := sql.Open("sqlite", "pkg/db/scheduler.db")
-	if err != nil {
-		return nil, err
-	}
-	defer DB.Close()
+func UpdateTask(s string, DB *sql.DB) (*TaskDTO, error) {
 
 	i, err := strconv.Atoi(s)
 	if err != nil {

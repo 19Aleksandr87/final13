@@ -7,12 +7,8 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-func TaskDel(id string) error {
-	DB, err := sql.Open("sqlite", "pkg/db/scheduler.db")
-	if err != nil {
-		return err
-	}
-	defer DB.Close()
+func TaskDel(id string, DB *sql.DB) error {
+
 	i, err := strconv.Atoi(id)
 	if err != nil {
 		return err

@@ -7,14 +7,9 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-func TaskPut(dto *TaskDTO) error {
-	DB, err := sql.Open("sqlite", "pkg/db/scheduler.db")
-	if err != nil {
-		return err
-	}
-	defer DB.Close()
+func TaskPut(dto *TaskDTO, DB *sql.DB) error {
 
-	task, err := ConvertToTaskDTO_Task(dto)
+	task, err := ConvertToTaskDTO_Task(*dto)
 	if err != nil {
 		return err
 	}

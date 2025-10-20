@@ -3,33 +3,26 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"final/pkg/api/services"
-	"fmt"
 	"io"
 	"net/http"
 	"strconv"
 	"strings"
 )
 
-func AddTask(w http.ResponseWriter, r *http.Request) {
-
-	DB, err := sql.Open("sqlite", "pkg/db/scheduler.db")
-	if err != nil {
-		http.Error(w, `{"error":"Failed to open result file"}`, http.StatusInternalServerError)
-		return
-	}
-	defer DB.Close()
+func AddTask(w http.ResponseWriter, r *http.Request, DB *sql.DB) {
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		services.Er(w, err)
+		services.Er(w, err, http.StatusInternalServerError)
 		return
 	}
 	jsonString := string(body)
 
 	str, content, err := services.Check(json.NewDecoder(strings.NewReader(jsonString)))
 	if err != nil {
-		services.Er(w, err)
+		services.Er(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -39,15 +32,15 @@ func AddTask(w http.ResponseWriter, r *http.Request) {
 		sql.Named("date", content.Date), sql.Named("title", content.Title), sql.Named("comment", content.Comment), sql.Named("repeat", content.Repeat),
 	)
 	if err != nil {
-		http.Error(w, `{"error":"не удалось записать в бд"}`, http.StatusInternalServerError)
+		services.Er(w, errors.New(`{"error":"не удалось записать в бд"}`), http.StatusInternalServerError)
 		return
 	}
 	i, err := res.LastInsertId()
 	if err != nil {
-		http.Error(w, fmt.Sprintf(`{"error":"%v"}`, err), http.StatusInternalServerError)
+		services.Er(w, err, http.StatusInternalServerError)
 		return
 	}
 	s := strconv.Itoa(int(i))
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]string{"id": s})
+	services.WriteJson(w, map[string]string{"id": s}, http.StatusCreated)
+
 }

@@ -33,9 +33,10 @@ func Check(r *json.Decoder) (string, Content, error) {
 		if tNow.Before(dstart) {
 			str = dstart.Format(FormatDate)
 		} else {
-
 			str = tNow.Format(FormatDate)
 		}
+	} else if tNow.Before(dstart) {
+		str = dstart.Format(FormatDate)
 	} else {
 		str, err = NextDate(tNow.Format(FormatDate), dstart.Format(FormatDate), content.Repeat)
 	}

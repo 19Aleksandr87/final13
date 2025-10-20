@@ -1,6 +1,7 @@
 package api
 
 import (
+	"database/sql"
 	"net/http"
 
 	"final/pkg/api/services"
@@ -14,7 +15,7 @@ type nextDate struct {
 
 var nd nextDate
 
-func NextDayHandler(w http.ResponseWriter, r *http.Request) {
+func NextDayHandler(w http.ResponseWriter, r *http.Request, DB *sql.DB) {
 	nd.Now = r.FormValue("now")
 	nd.Date = r.FormValue("date")
 	nd.Repeat = r.FormValue("repeat")
@@ -23,5 +24,6 @@ func NextDayHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(str))
 }

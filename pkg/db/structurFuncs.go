@@ -28,7 +28,7 @@ func ConvertTaskToTaskDTO(task *Task) TaskDTO {
 	}
 }
 
-func ConvertToTaskDTO_Task(dto *TaskDTO) (Task, error) {
+func ConvertToTaskDTO_Task(dto TaskDTO) (Task, error) {
 	i, err := strconv.Atoi(dto.ID)
 	if err != nil {
 		return Task{}, err
@@ -40,4 +40,14 @@ func ConvertToTaskDTO_Task(dto *TaskDTO) (Task, error) {
 		Comment: dto.Comment,
 		Repeat:  dto.Repeat,
 	}, nil
+}
+
+func convertTaskToTaskDTO(task Task) TaskDTO {
+	return TaskDTO{
+		ID:      strconv.Itoa(task.ID),
+		Date:    task.Date,
+		Title:   task.Title,
+		Comment: task.Comment,
+		Repeat:  task.Repeat,
+	}
 }
