@@ -15,6 +15,11 @@ type nextDate struct {
 
 var nd nextDate
 
+// не используемый параметр если он прям не обхожим то называй его _
+// вот так
+//func NextDayHandler(w http.ResponseWriter, r *http.Request, _ *sql.DB) {
+
+
 func NextDayHandler(w http.ResponseWriter, r *http.Request, DB *sql.DB) {
 	nd.Now = r.FormValue("now")
 	nd.Date = r.FormValue("date")

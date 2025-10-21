@@ -11,7 +11,10 @@ import (
 	"strings"
 )
 
+// AddTask добавляет задачу в бд
 func AddTask(w http.ResponseWriter, r *http.Request, DB *sql.DB) {
+// Раздели логику работы контроллера и сервиса на две функции
+// одна для чтения тела запроса и другая для валидации и записи в бд
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -42,5 +45,4 @@ func AddTask(w http.ResponseWriter, r *http.Request, DB *sql.DB) {
 	}
 	s := strconv.Itoa(int(i))
 	services.WriteJson(w, map[string]string{"id": s}, http.StatusCreated)
-
 }

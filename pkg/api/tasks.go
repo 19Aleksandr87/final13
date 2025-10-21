@@ -23,6 +23,8 @@ func TasksHandler(w http.ResponseWriter, r *http.Request, DB *sql.DB) {
 		t, err := time.Parse("02.01.2006", search)
 		if err == nil {
 			s := t.Format(services.FormatDate)
+			// магия чисел заведи константу назови ее гордо
+			// DefaultLimit или еще как то и передавай ее
 			tasks, err := db.DateTasks(s, 50, DB)
 			if err != nil {
 				services.Er(w, err, http.StatusInternalServerError)
@@ -33,7 +35,10 @@ func TasksHandler(w http.ResponseWriter, r *http.Request, DB *sql.DB) {
 			}, http.StatusInternalServerError)
 			return
 		}
-		err = nil
+
+		err = nil // это зачем ?
+
+		// магия чисел
 		tasks, err := db.SearchTasks(search, 50, DB)
 		if err != nil {
 			services.Er(w, err, http.StatusInternalServerError)
@@ -45,6 +50,7 @@ func TasksHandler(w http.ResponseWriter, r *http.Request, DB *sql.DB) {
 		return
 	}
 
+	// магия чисел
 	tasks, err := db.Tasks(50, DB) // в параметре максимальное количество записей
 	if err != nil {
 		services.Er(w, err, http.StatusInternalServerError)

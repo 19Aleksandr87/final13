@@ -21,6 +21,7 @@ func DelTask(w http.ResponseWriter, r *http.Request, DB *sql.DB) {
 		services.Er(w, errors.New(`{"error":"Не указан идентификатор"}`), http.StatusBadRequest)
 		return
 	}
+	// вот тут правильно для создания тоже самое надо
 	err := db.TaskDel(id, DB)
 	if err != nil {
 		services.Er(w, err, http.StatusNotFound)

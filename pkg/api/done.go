@@ -28,6 +28,7 @@ func DoneHandler(w http.ResponseWriter, r *http.Request, DB *sql.DB) {
 		return
 	}
 
+	// эту логику надо вынести в db сделать метод db.DoneTask и там все отработать
 	if dto.Repeat != "" {
 		now := time.Now()
 		dstart, err := time.Parse(services.FormatDate, dto.Date)

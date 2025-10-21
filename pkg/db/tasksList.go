@@ -28,6 +28,7 @@ func Tasks(i int, DB *sql.DB) ([]*TaskDTO, error) {
 	return tasks, nil
 }
 
+// проблемынй нейминг что за i? limit так ее назови
 func DateTasks(date string, i int, DB *sql.DB) ([]*TaskDTO, error) {
 	rows, err := DB.Query("SELECT * FROM scheduler WHERE date = ? LIMIT ?", date, i)
 
@@ -50,6 +51,7 @@ func DateTasks(date string, i int, DB *sql.DB) ([]*TaskDTO, error) {
 	return tasks, nil
 }
 
+// проблемынй нейминг что за i? limit так ее назови
 func SearchTasks(search string, i int, DB *sql.DB) ([]*TaskDTO, error) {
 	rows, err := DB.Query("SELECT * FROM scheduler WHERE title LIKE ? OR comment LIKE ? ORDER BY date LIMIT ?", fmt.Sprintf("%%%s%%", search), fmt.Sprintf("%%%s%%", search), i)
 
