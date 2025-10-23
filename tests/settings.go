@@ -5,5 +5,4 @@ var DBFile = "../pkg/db/scheduler.db"
 var FullNextDate = true
 var Search = true
 
-// var Token = “
-var Token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjA4ODcxNzEsInRva2VuIjoiNmI4NmIyNzNmZjM0ZmNlMTlkNmI4MDRlZmY1YTNmNTc0N2FkYTRlYWEyMmYxZDQ5YzAxZTUyZGRiNzg3NWI0YiJ9.XUmhEBp3I3aY86EPVrNbRQw3yTccwpW5rCQUT4nh5hc`
+var Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjEyNDA2NzAsInRva2VuIjoiZWYyZDEyN2RlMzdiOTQyYmFhZDA2MTQ1ZTU0YjBjNjE5YTFmMjIzMjdiMmViYmNmYmVjNzhmNTU2NGFmZTM5ZCJ9.QDReOz6rL9_xrwCH1Vvq7lqAsyIvuhdE92rmFGk2pvc"
