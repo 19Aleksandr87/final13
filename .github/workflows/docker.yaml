@@ -3,11 +3,11 @@ on: push
 jobs:
     test:
         runs-on: ubuntu-latest
-        container: golang:1.24.x
+        container: golang:1.24.2
         steps:
           - uses: actions/checkout@v4
 
           - name: Run Unit Tests
-            run: go vet ./...
+            run: go test -run ^TestApp$ ./tests
             
 
