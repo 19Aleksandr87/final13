@@ -1,0 +1,13 @@
+name: doker
+on: push
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        container: golang:1.24.x
+        steps:
+          - uses: actions/checkout@v4
+
+          - name: Run Unit Tests
+            run: go vet ./...
+            
+

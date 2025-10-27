@@ -41,9 +41,19 @@ func initRouter(router *http.ServeMux, db *sql.DB) {
 		api.NextDayHandler(w, r, db)
 	})
 
-	router.HandleFunc("/api/task", auth(func(w http.ResponseWriter, r *http.Request) {
-		api.TaskHandler(w, r, db)
+	router.HandleFunc("GET /api/task", auth(func(w http.ResponseWriter, r *http.Request) {
+		api.GetTask(w, r, db)
 	}))
+	router.HandleFunc("POST /api/task", auth(func(w http.ResponseWriter, r *http.Request) {
+		api.AddTask(w, r, db)
+	}))
+	router.HandleFunc("PUT /api/task", auth(func(w http.ResponseWriter, r *http.Request) {
+		api.PutTask(w, r, db)
+	}))
+	router.HandleFunc("DELETE /api/task", auth(func(w http.ResponseWriter, r *http.Request) {
+		api.DelTask(w, r, db)
+	}))
+
 	router.HandleFunc("/api/tasks", auth(func(w http.ResponseWriter, r *http.Request) {
 		api.TasksHandler(w, r, db)
 	}))
