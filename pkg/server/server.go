@@ -88,9 +88,9 @@ func StartServer(s *Settings) *http.Server {
 func auth(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		password := ""
-		if password = os.Getenv("TODO_PASSWORD"); password == "" {
+		/*if password = os.Getenv("TODO_PASSWORD"); password == "" {
 			password = "1"
-		}
+		}*/
 
 		if password != "" {
 			body, err := io.ReadAll(r.Body)

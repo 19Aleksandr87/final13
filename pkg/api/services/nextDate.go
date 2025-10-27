@@ -169,6 +169,8 @@ func generator(days []int, months []int, max map[int]int, dstartI time.Time) tim
 	year := int(dstartI.Year())
 	if (year%4 == 0 && year%100 != 0) || year%400 == 0 {
 		max[2] = 29
+	} else {
+		max[2] = 28
 	}
 
 	for _, m := range months {
@@ -183,6 +185,7 @@ func generator(days []int, months []int, max map[int]int, dstartI time.Time) tim
 
 		if month < m {
 			monthT := time.Month(m)
+
 			return time.Date(year, monthT, data[0], 0, 0, 0, 0, time.UTC)
 		}
 		for _, i := range data {
@@ -198,7 +201,7 @@ func generator(days []int, months []int, max map[int]int, dstartI time.Time) tim
 	}
 
 	dstartI = time.Date(year+1, time.January, 1, 0, 0, 0, 0, time.UTC)
-	generator(days, months, max, dstartI)
+	dstartI = generator(days, months, max, dstartI)
 	return dstartI
 }
 
