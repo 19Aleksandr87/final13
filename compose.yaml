@@ -4,7 +4,7 @@ services:
     ports:
       - "7540:7540" 
     volumes:
-      - sql:/var/lib/sql/data
+      - sql:/Desktop/
 
 volumes:
-  postgres-db: 
+  sql: 
