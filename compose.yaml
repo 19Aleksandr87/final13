@@ -3,3 +3,8 @@ services:
     build: .
     ports:
       - "7540:7540" 
+    volumes:
+      - sql:/var/lib/sql/data
+
+volumes:
+  postgres-db: 
