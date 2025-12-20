@@ -16,15 +16,13 @@ import (
 
 	"final/pkg/api"
 	"final/pkg/api/services"
-	"final/pkg/db"
 
 	"github.com/golang-jwt/jwt/v5"
-	_ "modernc.org/sqlite"
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 // порт по умочанию
 var port = "7540"
-var pathDB = "./pkg/db/scheduler.db"
 var TODO_PASSWORD = ""
 
 func Init(router *http.ServeMux, db *sql.DB) {
@@ -51,19 +49,18 @@ func Init(router *http.ServeMux, db *sql.DB) {
 }
 
 func StartServer(logger *log.Logger) *http.Server {
-
 	if envPort := os.Getenv("TODO_PORT"); envPort != "" {
 		port = envPort
 	}
-	if path := os.Getenv("TODO_DBFILE"); path != "" {
-		pathDB = path
-	}
 
-	err := db.Init(pathDB)
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+		postgres.host, postgres.port, postgres.user, postgres.password, postgres.dbname)
+
+	db, err := sql.Open("pgx", psqlconn)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("не удалось открыть БД")
 	}
-	db, err := sql.Open("sqlite", "pkg/db/scheduler.db")
+	err = postgres.init(db)
 	if err != nil {
 		log.Fatal(err)
 	}

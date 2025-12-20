@@ -3,8 +3,6 @@ package db
 import (
 	"database/sql"
 	"fmt"
-
-	_ "modernc.org/sqlite"
 )
 
 func TaskPut(dto *TaskDTO, DB *sql.DB) error {
@@ -13,8 +11,8 @@ func TaskPut(dto *TaskDTO, DB *sql.DB) error {
 	if err != nil {
 		return err
 	}
-	res, err := DB.Exec("UPDATE scheduler SET date = :date, title = :title, comment = :comment, repeat = :repeat WHERE id = :id",
-		sql.Named("date", task.Date), sql.Named("title", task.Title), sql.Named("comment", task.Comment), sql.Named("repeat", task.Repeat), sql.Named("id", task.ID))
+	res, err := DB.Exec("UPDATE scheduler SET date = $1, title = $2, comment = $3, repeat = $4 WHERE id = $5",
+		task.Date, task.Title, task.Comment, task.Repeat, task.ID)
 	if err != nil {
 		return err
 	}

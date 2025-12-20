@@ -45,7 +45,7 @@ func TestDone(t *testing.T) {
 		assert.Empty(t, ret)
 
 		var task Task
-		err = db.Get(&task, `SELECT * FROM scheduler WHERE id=?`, id)
+		err = db.Get(&task, `SELECT * FROM scheduler WHERE id=$1`, id)
 		assert.NoError(t, err)
 		now = now.AddDate(0, 0, 3)
 		assert.Equal(t, now.Format(`20060102`), task.Date)
@@ -66,10 +66,10 @@ func TestDelTask(t *testing.T) {
 
 	notFoundTask(t, id)
 
-	/*ret, err = postJSON("api/task", nil, http.MethodDelete)
+	ret, err = postJSON("api/task", nil, http.MethodDelete)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, ret)
 	ret, err = postJSON("api/task?id=wjhgese", nil, http.MethodDelete)
 	assert.NoError(t, err)
-	assert.NotEmpty(t, ret)*/
+	assert.NotEmpty(t, ret)
 }

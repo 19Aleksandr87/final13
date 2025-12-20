@@ -3,8 +3,6 @@ package db
 import (
 	"database/sql"
 	"strconv"
-
-	_ "modernc.org/sqlite"
 )
 
 func UpdateTask(s string, DB *sql.DB) (*TaskDTO, error) {
@@ -14,7 +12,7 @@ func UpdateTask(s string, DB *sql.DB) (*TaskDTO, error) {
 		return nil, err
 	}
 	var task Task
-	row := DB.QueryRow("SELECT id, date, title, comment, repeat FROM scheduler WHERE id = ?", i)
+	row := DB.QueryRow("SELECT id, date, title, comment, repeat FROM scheduler WHERE id = $1", i)
 	err = row.Scan(&task.ID, &task.Date, &task.Title, &task.Comment, &task.Repeat)
 	if err != nil {
 		return nil, err

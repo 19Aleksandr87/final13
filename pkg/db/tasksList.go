@@ -3,13 +3,11 @@ package db
 import (
 	"database/sql"
 	"fmt"
-
-	_ "modernc.org/sqlite"
 )
 
 func Tasks(i int, DB *sql.DB) ([]*TaskDTO, error) {
 
-	rows, err := DB.Query("SELECT id, date, title, comment, repeat FROM scheduler ORDER BY date LIMIT ?", i)
+	rows, err := DB.Query("SELECT id, date, title, comment, repeat FROM scheduler ORDER BY date LIMIT $1", i)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +27,7 @@ func Tasks(i int, DB *sql.DB) ([]*TaskDTO, error) {
 }
 
 func DateTasks(date string, i int, DB *sql.DB) ([]*TaskDTO, error) {
-	rows, err := DB.Query("SELECT * FROM scheduler WHERE date = ? LIMIT ?", date, i)
+	rows, err := DB.Query("SELECT * FROM scheduler WHERE date = $1 LIMIT $2", date, i)
 
 	if err != nil {
 		return nil, err
@@ -51,7 +49,7 @@ func DateTasks(date string, i int, DB *sql.DB) ([]*TaskDTO, error) {
 }
 
 func SearchTasks(search string, i int, DB *sql.DB) ([]*TaskDTO, error) {
-	rows, err := DB.Query("SELECT * FROM scheduler WHERE title LIKE ? OR comment LIKE ? ORDER BY date LIMIT ?", fmt.Sprintf("%%%s%%", search), fmt.Sprintf("%%%s%%", search), i)
+	rows, err := DB.Query("SELECT * FROM scheduler WHERE title LIKE $1 OR comment LIKE $2 ORDER BY date LIMIT $3", fmt.Sprintf("%%%s%%", search), fmt.Sprintf("%%%s%%", search), i)
 
 	if err != nil {
 		return nil, err

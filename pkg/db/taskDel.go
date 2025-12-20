@@ -3,8 +3,6 @@ package db
 import (
 	"database/sql"
 	"strconv"
-
-	_ "modernc.org/sqlite"
 )
 
 func TaskDel(id string, DB *sql.DB) error {
@@ -14,7 +12,7 @@ func TaskDel(id string, DB *sql.DB) error {
 		return err
 	}
 
-	_, err = DB.Exec("DELETE FROM scheduler WHERE id = ?", i)
+	_, err = DB.Exec("DELETE FROM scheduler WHERE id = $1", i)
 	if err != nil {
 		return err
 	}
