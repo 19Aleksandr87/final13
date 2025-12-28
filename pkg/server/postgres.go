@@ -25,9 +25,10 @@ func (p *postgresType) init(DB *sql.DB) error {
 }
 
 var postgres = postgresType{
-	host:     "localhost",
+	//host:     "localhost",
+	host:     "db",
 	port:     5432,
 	user:     "postgres",
-	password: "0000",
-	dbname:   "users",
+	password: "postgres",
+	dbname:   "postgres",
 }

@@ -23,7 +23,7 @@ import (
 
 // порт по умочанию
 var port = "7540"
-var TODO_PASSWORD = ""
+var TODO_PASSWORD = "1"
 
 func Init(router *http.ServeMux, db *sql.DB) {
 	router.HandleFunc("/api/signin", Auth(func(w http.ResponseWriter, r *http.Request) {

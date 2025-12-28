@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: no
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+    - ./pg_data:/var/lib/postgres/data
+    ports:
+      - 5432:5432
+
+  pgadmin:
+   image: elestio/pgadmin:latest
+   restart: no
+   environment:
+    PGADMIN_DEFAULT_EMAIL: postgres@gmail.com
+    PGADMIN_DEFAULT_PASSWORD: postgres
+    PGADMIN_LISTEN_PORT: 8080
+   ports:
+    - 8080:8080
+   depends_on:
+    - db
+  web:
+    build: .
+    ports:
+      - 7540:7540
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - db
+    command: ["./wait-for-it.sh", "db:5432", "--", "your-app-command"]
